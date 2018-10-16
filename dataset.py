@@ -48,5 +48,5 @@ def dataset(dataset_name):
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=cf.batch_size, shuffle=True, num_workers=4)
     testloader = torch.utils.data.DataLoader(testset, batch_size=cf.batch_size, shuffle=False, num_workers=4)
     
-    return trainloader, testloader
+    return trainloader, testloader, outputs, inputs
 
