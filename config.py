@@ -3,6 +3,7 @@ num_epochs = 100
 batch_size = 256
 optim_type = 'Adam'
 resize=32
+lr=0.001
 
 mean = {
     'cifar10': (0.4914, 0.4822, 0.4465),
