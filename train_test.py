@@ -3,6 +3,8 @@ import torch.optim as optim
 from torch.autograd import Variable
 import config as cf
 import time
+from fastprogress import master_bar
+
 
 use_cuda = torch.cuda.is_available()
 
@@ -33,6 +35,8 @@ def train(epoch, net, trainloader, criterion):
     print ('| Epoch [%3d/%3d] \t\tLoss: %.4f Acc@1: %.3f%%'
                 %(epoch, cf.num_epochs, loss.data[0], 100.*correct/total))
 
+    return 100.*correct/total
+
 
 def test(epoch, net, testloader, criterion):
     global best_acc
@@ -61,13 +65,24 @@ def test(epoch, net, testloader, criterion):
         best_acc = acc
     print('* Test results : Acc@1 = %.2f%%' % (best_acc))
 
+    return acc
+
 def start_train_test(net,trainloader, testloader, criterion):
     elapsed_time = 0
+
     for epoch in range(cf.start_epoch, cf.start_epoch + cf.num_epochs):
+        mb = master_bar(range( cf.start_epoch + cf.num_epochs))
+        mb.names = ['training acc', 'test acc']
+
         start_time = time.time()
 
-        train(epoch, net, trainloader, criterion)
-        test(epoch, net, testloader, criterion)
+        train_acc = train(epoch, net, trainloader, criterion)
+        test_acc = test(epoch, net, testloader, criterion)
+
+        graphs = [[epoch, train_acc], [epoch, test_acc]]
+        x_bounds = [0,range( cf.start_epoch + cf.num_epochs)]
+        y_bounds = [0, 100]
+        mb.update_graph(graphs, x_bounds, y_bounds)
 
         epoch_time = time.time() - start_time
         elapsed_time += epoch_time
