@@ -24,7 +24,6 @@ def dataset(dataset_name):
     
     elif (dataset_name == 'mnist'):
         print("| Preparing MNIST dataset...")
-        sys.stdout.write("| ")
         trainset = torchvision.datasets.MNIST(root='./data', train=True, download=True, transform=transform_training())
         testset = torchvision.datasets.MNIST(root='./data', train=False, download=False, transform=transform_testing())
         outputs = 10

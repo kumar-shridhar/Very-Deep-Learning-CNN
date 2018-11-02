@@ -3,8 +3,6 @@ import torch.optim as optim
 from torch.autograd import Variable
 import config as cf
 import time
-from fastprogress import master_bar
-
 
 use_cuda = torch.cuda.is_available()
 
@@ -71,22 +69,16 @@ def start_train_test(net,trainloader, testloader, criterion):
     elapsed_time = 0
 
     for epoch in range(cf.start_epoch, cf.start_epoch + cf.num_epochs):
-        mb = master_bar(range( cf.start_epoch + cf.num_epochs))
-        mb.names = ['training acc', 'test acc']
-
         start_time = time.time()
 
         train_acc = train(epoch, net, trainloader, criterion)
         test_acc = test(epoch, net, testloader, criterion)
 
-        graphs = [[epoch, train_acc], [epoch, test_acc]]
-        x_bounds = [0,range( cf.start_epoch + cf.num_epochs)]
-        y_bounds = [0, 100]
-        mb.update_graph(graphs, x_bounds, y_bounds)
-
         epoch_time = time.time() - start_time
         elapsed_time += epoch_time
         print('| Elapsed time : %d:%02d:%02d' % (get_hms(elapsed_time)))
+
+    return train_acc, test_acc
 
 def get_hms(seconds):
     m, s = divmod(seconds, 60)
