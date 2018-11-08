@@ -32,12 +32,12 @@ for t in range(500):
 
     # Backprop to compute gradients of w1 and w2 with respect to loss
     grad_y_pred = 2.0 * (y_pred - y)
-    grad_w2 = h_relu.t().mm(grad_y_pred)
+    grad_w2 =
     grad_h_relu = grad_y_pred.mm(w2.t())
     grad_h = grad_h_relu.clone()
     grad_h[h < 0] = 0
-    grad_w1 = x.t().mm(grad_h)
+    grad_w1 = 
 
     # Update weights using gradient descent
-    w1 -= learning_rate * grad_w1
-    w2 -= learning_rate * grad_w2
+    w1 -= 
+    w2 -= 
